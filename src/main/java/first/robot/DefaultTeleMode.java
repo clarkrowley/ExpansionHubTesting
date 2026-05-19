@@ -25,14 +25,15 @@ public class DefaultTeleMode extends PeriodicOpMode {
     public  double PID_D = 0.0;
     public  double PID_F = 0.0;
     public static int TICKS_PER_REV = 28;
-    double TARGET_RPM = 3025.;
-   double TARGET_VEL_HIGH;
-   double RPM = 0;
+    //double TARGET_RPM = 3025.;
+   //double TARGET_VEL_HIGH;
+   double RPM;
 
 
   public DefaultTeleMode(Robot robot, DefaultUserControls userControls) {
     this.robot = robot;
     this.userControls = userControls;
+    /* 
       NetworkTable nt = NetworkTableInstance.getDefault().getTable("teleop");
    NetworkTableEntry motor2Speed = nt.getEntry("motor2Speed");
     NetworkTableEntry motor3Speed = nt.getEntry("motor3Speed");
@@ -40,8 +41,8 @@ public class DefaultTeleMode extends PeriodicOpMode {
     NetworkTableEntry motor2I = nt.getEntry("motor2I");
     NetworkTableEntry motor2D = nt.getEntry("motor2D");
     NetworkTableEntry motor2F = nt.getEntry("motor2F");
-        NetworkTableEntry RPM = nt.getEntry("RPM");
-
+       // NetworkTableEntry RPM = nt.getEntry("RPM");
+       */
     
     
   }
@@ -51,8 +52,9 @@ public class DefaultTeleMode extends PeriodicOpMode {
     robot.motor3.follow(robot.motor2);  
     robot.motor3.setEnabled(true);
     robot.motor3.setReversed(true);
-    robot.motor2.getVelocityConstants().setPID(PID_P, PID_I, PID_D);
-    robot.motor2.getVelocityConstants().setFF(PID_F, 0, 0);  
+    //robot.motor2.getVelocityConstants().setPID(PID_P, PID_I, PID_D);
+    //robot.motor2.getVelocityConstants().setFF(PID_F, 0, 0); 
+    RPM = 0; 
   }
 
   @Override
@@ -62,7 +64,7 @@ public class DefaultTeleMode extends PeriodicOpMode {
     //robot.motor2.setThrottle(-userControls.getGamepad(0).getLeftX());
     double m_vel_motor2 = robot.motor2.getEncoderVelocity();
     double m_vel_motor3 = robot.motor3.getEncoderVelocity();
-    ExpansionHubVelocityConstants motor2PID = robot.motor2.getVelocityConstants();
+    //ExpansionHubVelocityConstants motor2PID = robot.motor2.getVelocityConstants();
     SmartDashboard.putNumber("motor 2 speed",m_vel_motor2);
     SmartDashboard.putNumber("motor 3 speed",m_vel_motor3);
     SmartDashboard.putNumber("motor2P", PID_P);
@@ -70,19 +72,17 @@ public class DefaultTeleMode extends PeriodicOpMode {
     SmartDashboard.putNumber("motor2D", PID_D);
     SmartDashboard.putNumber("motor2F", PID_F);
     SmartDashboard.putNumber("RPM", RPM);
-     PID_P = SmartDashboard.getNumber("motor2P", PID_P);
-     PID_I = SmartDashboard.getNumber("motor2I", PID_I);
+    PID_P = SmartDashboard.getNumber("motor2P", PID_P);
+    PID_I = SmartDashboard.getNumber("motor2I", PID_I);
     PID_D = SmartDashboard.getNumber("motor2D", PID_D);
-     PID_F = SmartDashboard.getNumber("motor2F", PID_F);
-    robot.motor2.getVelocityConstants().setPID(PID_P, PID_I, PID_D);
-    robot.motor2.getVelocityConstants().setFF(PID_F, 0, 0);  
-         RPM = SmartDashboard.getNumber("RPM", RPM);
-
-      double TARGET_VEL = RPM * TICKS_PER_REV / 60;
+    PID_F = SmartDashboard.getNumber("motor2F", PID_F);
+    //robot.motor2.getVelocityConstants().setPID(PID_P, PID_I, PID_D);
+    //robot.motor2.getVelocityConstants().setFF(PID_F, 0, 0);  
+    RPM = SmartDashboard.getNumber("RPM", 10);
+    double TARGET_VEL = (RPM * TICKS_PER_REV) / 60.;
+    SmartDashboard.putNumber("TRGET", TARGET_VEL);
     robot.motor2.setVelocitySetpoint(TARGET_VEL);
-      SmartDashboard.putNumber("TRGET", TARGET_VEL);
-  
-
+    SmartDashboard.updateValues();
   }
    // robot.motor3.setThrottle(-userControls.getGamepad(0).getRightX());
    // robot.servo0.setPosition(userControls.getGamepad(0).getLeftTriggerAxis());
