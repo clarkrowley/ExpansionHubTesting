@@ -5,8 +5,10 @@
 package first.robot;
 
 import org.wpilib.driverstation.DefaultUserControls;
+import org.wpilib.driverstation.DriverStation;
 import org.wpilib.driverstation.UserControlsInstance;
 import org.wpilib.epilogue.Logged;
+import org.wpilib.epilogue.Epilogue;
 import org.wpilib.framework.OpModeRobot;
 import org.wpilib.hardware.expansionhub.ExpansionHubMotor;
 import org.wpilib.hardware.expansionhub.ExpansionHubServo;
@@ -30,6 +32,7 @@ public class Robot extends OpModeRobot {
   /** Called once at the beginning of the robot program. */
   public Robot() {
     DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
     //Epilogue.bind(this);
   }
 }
